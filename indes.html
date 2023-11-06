@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <script>
+        // Create an object with token and event_id
+        let obj = {
+            token: "theTokenValue", // Replace with the actual token value
+            event_id: "theEventIDValue" // Replace with the actual event ID
+        };
+        
+        // Initialize the WebSocket connection
+        let socket = new WebSocket("ws://localhost:8084/api/event/rate/ws");
+        console.log("Attempting WebSocket connection...");
+
+        socket.onopen = () => {
+            console.log("Successfully connected to the WebSocket server.");
+            // Send the object as a JSON string over the WebSocket connection
+            socket.send(JSON.stringify(obj));
+        };
+
+        socket.onmessage = (msg) => {
+            console.log("Received message: ", msg.data);
+            // Handle incoming messages here
+            obj = {
+                token: "theTokenValue", // Replace with the actual token value
+                event_id: msg.data["token"] // Replace with the actual event ID
+            };
+        };
+
+        socket.onclose = (event) => {
+            console.log("WebSocket connection closed: ", event);
+        };
+
+        socket.onerror = (error) => {
+            console.log("WebSocket error: ", error);
+        };
+    </script>
+</body>
+</html>
